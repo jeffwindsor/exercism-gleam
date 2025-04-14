@@ -17,8 +17,21 @@
         alias gb="gleam build"
         alias gr="gleam run"
         alias gs="gleam shell"
-        alias es="exercism-submit"
-              
+
+        alias es="exercism submit"
+        
+        function exer-download(){
+          exercism download --track=gleam --exercise=$1
+          cd $SOURCE_JEFF/exercism/gleam/$1
+        }
+        alias ed="exer-download"
+
+        function exer-edit(){
+          cd $SOURCE_JEFF/exercism/gleam/$1
+          hx **/*.gleam
+        }
+        alias ee="exer-edit"
+        
         echo -e "\e[1;94m == gleam shell  =="
         exercism version
         gleam --version

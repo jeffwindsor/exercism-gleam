@@ -19,9 +19,11 @@
         alias gs="gleam shell"
 
         function exercism-submit(){
+            local message="Gleam $(basename $(pwd))"
+            echo "$message"
             exercism submit
             git add --all
-            git commit -m "Gleam $(basename $(pwd))"
+            git commit -m "$message"
         }
         alias es="exercism-submit"
         

@@ -18,7 +18,12 @@
         alias gr="gleam run"
         alias gs="gleam shell"
 
-        alias es="exercism submit"
+        function exercism-submit(){
+            exercism submit
+            git add --all
+            git commit -m "Gleam $(basename $(pwd))"
+        }
+        alias es="exercism-submit"
         
         function exer-download(){
           exercism download --track=gleam --exercise=$1

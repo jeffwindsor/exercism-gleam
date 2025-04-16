@@ -13,17 +13,18 @@
         rebar3    # erlang build tool that makes it easy to compile and test
       ];
       shellHook = ''
-        alias gt="gleam test"
+        alias gt="clear & gleam test"
         alias gb="gleam build"
-        alias gr="gleam run"
+        alias gr="clear & gleam run"
         alias gs="gleam shell"
 
         function exercism-submit(){
-            local message="Gleam $(basename $(pwd))"
-            echo "$message"
-            exercism submit
-            git add --all
-            git commit -m "$message"
+          clear
+          local message="Gleam $(basename $(pwd))"
+          echo "$message"
+          exercism submit
+          git add --all
+          git commit -m "$message"
         }
         alias es="exercism-submit"
         

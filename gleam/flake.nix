@@ -8,6 +8,7 @@
     	name = "gleam";
       packages = with pkgs; [
         exercism
+        glow      # mark down
         gleam
         erlang    # required for gleam
         rebar3    # erlang build tool that makes it easy to compile and test
@@ -16,7 +17,6 @@
         alias gt="clear & gleam test"
         alias gb="gleam build"
         alias gr="clear & gleam run"
-        alias gs="gleam shell"
 
         function exercism-submit(){
           clear

@@ -25,6 +25,7 @@
           exercism submit
           git add --all
           git commit -m "$message"
+          cd ..
         }
         alias es="exercism-submit"
         

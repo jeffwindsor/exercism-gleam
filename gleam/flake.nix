@@ -14,9 +14,9 @@
         rebar3    # erlang build tool that makes it easy to compile and test
       ];
       shellHook = ''
-        alias gt="clear & gleam test"
+        alias gt="gleam test"
         alias gb="gleam build"
-        alias gr="clear & gleam run"
+        alias gr="gleam run"
 
         function exercism-submit(){
           clear
@@ -36,8 +36,7 @@
         alias ed="exer-download"
 
         function exer-edit(){
-          cd $SOURCE_JEFF/exercism/gleam/$1
-          hx **/*.gleam
+          hx $SOURCE_JEFF/exercism/gleam/$1/**/*.gleam
         }
         alias ee="exer-edit"
         
@@ -47,7 +46,7 @@
         echo "erlang version: $(erl -eval 'erlang:display(erlang:system_info(otp_release)), halt().'  -noshell)"
         rebar3 --version
         echo -e "\e[0m"
-        ar "gleam|exercism"
+        alias | rg "gleam|exercism"
       '';
     };
   };

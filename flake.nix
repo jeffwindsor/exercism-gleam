@@ -31,12 +31,12 @@
         
         function exer-download(){
           exercism download --track=gleam --exercise=$1
-          cd $SOURCE_JEFF/exercism/gleam/$1
+          cd $SOURCE_JEFF/exercism-gleam/$1
         }
         alias ed="exer-download"
 
         function exer-edit(){
-          hx $SOURCE_JEFF/exercism/gleam/$1/**/*.gleam
+          hx $SOURCE_JEFF/exercism-gleam/$1/**/*.gleam
         }
         alias ee="exer-edit"
         

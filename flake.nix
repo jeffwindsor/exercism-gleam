@@ -14,11 +14,7 @@
         rebar3    # erlang build tool that makes it easy to compile and test
       ];
       shellHook = ''
-        alias gt="gleam test"
-        alias gb="gleam build"
-        alias gr="gleam run"
-
-        function exercism-submit(){
+        function exer-submit(){
           clear
           local message="Gleam $(basename $(pwd))"
           echo "$message"
@@ -27,17 +23,22 @@
           git commit -m "$message"
           cd ..
         }
-        alias es="exercism-submit"
         
         function exer-download(){
           exercism download --track=gleam --exercise=$1
-          cd $SOURCE_JEFF/exercism-gleam/$1
+          cd $SOURCE_JEFF/exercism/gleam/$1
         }
-        alias ed="exer-download"
 
         function exer-edit(){
-          hx $SOURCE_JEFF/exercism-gleam/$1/**/*.gleam
+          hx $SOURCE_JEFF/exercism/gleam/$1/**/*.gleam
         }
+        
+        alias gt="gleam test"
+        alias gb="gleam build"
+        alias gr="gleam run"
+
+        alias es="exer-submit"
+        alias ed="exer-download"
         alias ee="exer-edit"
         
         echo -e "\e[1;94m == gleam shell  =="
@@ -46,7 +47,7 @@
         echo "erlang version: $(erl -eval 'erlang:display(erlang:system_info(otp_release)), halt().'  -noshell)"
         rebar3 --version
         echo -e "\e[0m"
-        alias | rg "gleam|exercism"
+        alias | rg "gleam|exer"
       '';
     };
   };

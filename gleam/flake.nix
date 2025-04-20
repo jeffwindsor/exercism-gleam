@@ -47,6 +47,7 @@
         echo "erlang version: $(erl -eval 'erlang:display(erlang:system_info(otp_release)), halt().'  -noshell)"
         rebar3 --version
         echo -e "\e[0m"
+        ar "gleam|exercism"
       '';
     };
   };

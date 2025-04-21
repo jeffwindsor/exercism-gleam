@@ -39,7 +39,7 @@
 
         alias es="exer-submit"
         alias ed="exer-download"
-        alias ee="exer-edit"
+        alias ee="hx **/*.gleam"
         
         echo -e "\e[1;94m == gleam shell  =="
         exercism version

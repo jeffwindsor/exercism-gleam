@@ -6,6 +6,10 @@ pub fn main() {
   test_runner.main()
 }
 
+pub fn normalize_1440_is_0_test() {
+  1440 |> clock.normalize() |> should.equal(0)
+}
+
 pub fn create_a_new_clock_with_an_initial_time_on_the_hour_test() {
   clock.create(hour: 8, minute: 0)
   |> clock.display()

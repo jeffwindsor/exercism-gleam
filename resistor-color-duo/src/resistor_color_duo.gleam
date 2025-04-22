@@ -11,6 +11,24 @@ pub type Color {
   White
 }
 
+pub fn code(color: Color) -> Int {
+  case color {
+    Black -> 0
+    Brown -> 1
+    Red -> 2
+    Orange -> 3
+    Yellow -> 4
+    Green -> 5
+    Blue -> 6
+    Violet -> 7
+    Grey -> 8
+    White -> 9
+  }
+}
+
 pub fn value(colors: List(Color)) -> Result(Int, Nil) {
-  todo
+  case colors {
+    [a, b, ..] -> Ok({ code(a) * 10 } + code(b))
+    _ -> Error(Nil)
+  }
 }

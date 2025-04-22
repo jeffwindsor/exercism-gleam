@@ -1,4 +1,4 @@
-import gleam/io
+import gleam/bool
 import gleam/list
 import gleam/result
 
@@ -6,52 +6,8 @@ pub type Tree(a) {
   Tree(label: a, children: List(Tree(a)))
 }
 
-fn dfs(tree: Tree(a), target: a) -> Result(List(Tree(a)), Nil) {
-  tree.children
-  |> list.find_map(fn(child) {
-    dfs(child, target)
-    |> result.map(fn(path) { [tree, ..path] })
-  })
-}
-
-pub fn rebuild(path: List(Tree(a))) -> Result(Tree(a), Nil) {
-  case path |> list.reverse() {
-    [] -> Error(Nil)
-    [last] -> Ok(last)
-    [last, ..rest] -> {
-      let rebuilt =
-        list.fold(rest, last, fn(parent, child_subtree) {
-          let Tree(label: parent_label, children: siblings) = parent
-
-          let remaining_siblings =
-            list.filter(siblings, fn(s) { s != child_subtree })
-
-          Tree(label: parent_label, children: [
-            child_subtree,
-            ..remaining_siblings
-          ])
-        })
-
-      Ok(rebuilt)
-    }
-  }
-}
-
 pub fn from_pov(tree: Tree(a), from: a) -> Result(Tree(a), Nil) {
-  case tree.label {
-    // no-op case
-    l if l == from -> Ok(tree)
-    // go case
-    _ -> {
-      let result = dfs(tree, from)
-      io.debug(result)
-      case result {
-        // rebuild path expects path from new root to old root
-        Ok(path) -> rebuild(path)
-        _ -> Error(Nil)
-      }
-    }
-  }
+  result.try(search(tree, from, []), list.reduce(_, switch_pov))
 }
 
 pub fn path_to(
@@ -59,5 +15,24 @@ pub fn path_to(
   from from: a,
   to to: a,
 ) -> Result(List(a), Nil) {
-  todo
+  use root <- result.try(from_pov(tree, from))
+  use path <- result.try(search(root, to, []))
+  path |> list.map(fn(n) { n.label }) |> Ok
+}
+
+fn switch_pov(parent: Tree(a), child: Tree(a)) -> Tree(a) {
+  let not_child = fn(y: Tree(a)) { y.label != child.label }
+  let parent =
+    Tree(..parent, children: parent.children |> list.filter(not_child))
+  Tree(..child, children: [parent, ..child.children])
+}
+
+fn search(
+  tree: Tree(a),
+  value: a,
+  path: List(Tree(a)),
+) -> Result(List(Tree(a)), Nil) {
+  let path = [tree, ..path]
+  use <- bool.guard(tree.label == value, Ok(path |> list.reverse))
+  tree.children |> list.find_map(search(_, value, path))
 }

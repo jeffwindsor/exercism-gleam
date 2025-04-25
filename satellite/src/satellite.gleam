@@ -1,4 +1,3 @@
-// import gleam/bool.{guard}
 import gleam/list
 import gleam/pair
 import gleam/set
@@ -33,25 +32,25 @@ pub fn tree_from_traversals(
     False, _, _ -> Error(DifferentLengths)
     _, False, _ -> Error(DifferentItems)
     _, _, False -> Error(NonUniqueItems)
-    _, _, _ -> Ok(traverse(inorder, preorder))
+    _, _, _ -> Ok(build_tree(inorder, preorder))
   }
 }
 
-fn traverse(in: List(a), preorder: List(a)) -> Tree(a) {
+fn build_tree(inorder: List(a), preorder: List(a)) -> Tree(a) {
   case preorder {
     [] -> Nil
 
     [item, ..pre] -> {
       let #(left_in, right_in) =
-        pair.map_second(list.split_while(in, fn(i) { i != item }), list.drop(
-          _,
-          1,
-        ))
+        pair.map_second(
+          list.split_while(inorder, fn(i) { i != item }),
+          list.drop(_, 1),
+        )
 
       let #(left_pre, right_pre) =
         list.split_while(pre, list.contains(left_in, _))
 
-      Node(item, traverse(left_in, left_pre), traverse(right_in, right_pre))
+      Node(item, build_tree(left_in, left_pre), build_tree(right_in, right_pre))
     }
   }
 }

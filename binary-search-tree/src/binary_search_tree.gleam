@@ -7,31 +7,34 @@ pub type Tree {
 }
 
 pub fn to_tree(data: List(Int)) -> Tree {
-  case data {
-    [] -> Nil
-    [first, ..rest] -> insert_many(Node(first, Nil, Nil), rest)
+  Nil |> add_values(data)
+}
+
+fn add_values(tree: Tree, values: List(Int)) -> Tree {
+  case values {
+    [] -> tree
+    [first, ..rest] -> {
+      tree
+      |> add_value(first)
+      |> add_values(rest)
+    }
   }
 }
 
-fn insert(tree: Tree, value: Int) -> Tree {
+fn add_value(tree: Tree, value: Int) -> Tree {
   case tree {
     Nil -> Node(value, Nil, Nil)
+    // value goes left if less than or equal to parent 
     Node(data, left, right) -> {
       case value <= data {
-        True -> Node(data, insert(left, value), right)
-        False -> Node(data, left, insert(right, value))
+        True -> Node(data, add_value(left, value), right)
+        False -> Node(data, left, add_value(right, value))
       }
     }
   }
 }
 
-fn insert_many(tree: Tree, values: List(Int)) -> Tree {
-  case values {
-    [] -> tree
-    [first, ..rest] -> insert_many(insert(tree, first), rest)
-  }
-}
-
 pub fn sorted_data(data: List(Int)) -> List(Int) {
+  // not sure what this is supposed to do in reference to the rest of the problem
   list.sort(data, int.compare)
 }

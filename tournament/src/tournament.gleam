@@ -19,7 +19,7 @@ pub fn tally(input: String) -> String {
   |> flat_map(parse_input_line)
   |> group(fn(a) { a.name })
   |> values
-  |> map(append_team_scores)
+  |> map(team_score_summary)
   // out put needs to be teams by with most points first
   |> sort(fn(a, b) { compare(b.points, a.points) })
   |> map(to_tally_line)
@@ -28,19 +28,22 @@ pub fn tally(input: String) -> String {
 }
 
 fn to_tally_line(ts: TeamScore) -> String {
-  let column = fn(v) { repeat(" ", 3 - length(to_string(v))) <> to_string(v) }
+  let as_column = fn(v) {
+    let padding = repeat(" ", 3 - length(to_string(v)))
+    padding <> to_string(v)
+  }
   [
     ts.name <> repeat(" ", 30 - length(ts.name)),
-    column(ts.matches),
-    column(ts.wins),
-    column(ts.draws),
-    column(ts.losses),
-    column(ts.points),
+    as_column(ts.matches),
+    as_column(ts.wins),
+    as_column(ts.draws),
+    as_column(ts.losses),
+    as_column(ts.points),
   ]
   |> join(" |")
 }
 
-fn append_team_scores(scores: List(TeamScore)) -> TeamScore {
+fn team_score_summary(scores: List(TeamScore)) -> TeamScore {
   let empty = TeamScore("", 0, 0, 0, 0, 0)
   scores
   |> list.fold(empty, fn(acc, next) {

@@ -14,6 +14,13 @@ pub type Game {
   )
 }
 
+fn next_player(player: Player) {
+  case player {
+    White -> Black
+    Black -> White
+  }
+}
+
 pub fn apply_rules(
   game: Game,
   rule1: fn(Game) -> Result(Game, String),
@@ -29,13 +36,7 @@ pub fn apply_rules(
     |> r.try(rule4)
   {
     // -> If all rules pass, return a `Game` with all changes from the rules applied, and change player
-    Ok(g) -> {
-      let new_player = case g.player {
-        White -> Black
-        Black -> White
-      }
-      Game(..g, player: new_player)
-    }
+    Ok(g) -> Game(..g, player: next_player(g.player))
     // -> If any rule fails, return the original Game, but with the error field set
     Error(s) -> Game(..game, error: s)
   }

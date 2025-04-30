@@ -1,3 +1,4 @@
+import gleam/bool.{negate}
 import gleam/list.{all, any, append, filter, prepend, unique}
 
 pub opaque type Set(t) {
@@ -21,11 +22,11 @@ pub fn is_subset(first: Set(t), of second: Set(t)) -> Bool {
 }
 
 pub fn disjoint(first: Set(t), second: Set(t)) -> Bool {
-  first.items |> any(contains(second, _))
+  first.items |> any(contains(second, _)) |> negate
 }
 
 pub fn is_equal(first: Set(t), to second: Set(t)) -> Bool {
-  first.items == second.items
+  is_subset(first, second) && is_subset(second, first)
 }
 
 pub fn add(to set: Set(t), this member: t) -> Set(t) {

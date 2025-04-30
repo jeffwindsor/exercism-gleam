@@ -1,20 +1,15 @@
-import gleam/dict.{type Dict}
-import gleam/list
-import gleam/string
+import gleam/dict.{type Dict, insert, to_list}
+import gleam/list.{fold}
+import gleam/string.{lowercase}
 
 fn transform_entry(
-  new_format: Dict(String, Int),
-  old_entry: #(Int, List(String)),
+  output: Dict(String, Int),
+  input: #(Int, List(String)),
 ) -> Dict(String, Int) {
-  let #(score, letter_list) = old_entry
-  letter_list
-  |> list.fold(new_format, fn(nf, letter) {
-    dict.insert(nf, string.lowercase(letter), score)
-  })
+  let #(score, letters) = input
+  letters |> fold(output, fn(acc, l) { insert(acc, lowercase(l), score) })
 }
 
 pub fn transform(legacy: Dict(Int, List(String))) -> Dict(String, Int) {
-  legacy
-  |> dict.to_list
-  |> list.fold(dict.new(), transform_entry)
+  legacy |> to_list |> fold(dict.new(), transform_entry)
 }

@@ -1,5 +1,5 @@
 import gleam/bool
-import gleam/int.{parse, sum}
+import gleam/int.{sum}
 import gleam/list.{index_map, length, map, reverse}
 import gleam/result.{all, is_error, values}
 import gleam/string.{replace, to_graphemes}
@@ -9,7 +9,7 @@ pub fn valid(value: String) -> Bool {
     value
     |> replace(" ", "")
     |> to_graphemes
-    |> map(parse)
+    |> map(int.parse)
 
   // single digits not valid
   use <- bool.guard(length(digits) < 2, False)
